@@ -1,12 +1,12 @@
 package com.wavefront.internal;
 
-import com.google.common.collect.ImmutableMap;
-
 import com.wavefront.internal.reporter.WavefrontInternalReporter;
 import com.wavefront.sdk.direct_ingestion.WavefrontDirectIngestionClient;
 import com.wavefront.sdk.proxy.WavefrontProxyClient;
 
 import java.io.IOException;
+import java.util.HashMap;
+import java.util.Map;
 import java.util.concurrent.TimeUnit;
 import java.util.concurrent.atomic.AtomicInteger;
 
@@ -53,10 +53,13 @@ public class Main {
     /* Invoke this method to report your metrics and histograms with given prefix */
     builder.prefixedWith("myInternal");
 
+    Map<String, String> reporterTagsMap = new HashMap<String, String>() {{
+      put("env", "Staging");
+      put("location", "SF");
+    }};
+
     /* Set reporter level point tags map for your metrics and histograms */
-    builder.withReporterPointTags(ImmutableMap.<String, String>builder().
-        put("env", "Staging").
-        put("location", "SF").build());
+    builder.withReporterPointTags(reporterTagsMap);
 
     /* Add a specific reporter level point tag key value for your metrics and histograms */
     builder.withReporterPointTag("cluster", "us-west");
@@ -82,24 +85,22 @@ public class Main {
     /* Report metrics and histograms to Wavefront every 30 seconds */
     internalReporter.start(30, TimeUnit.SECONDS);
 
-    Counter counter = internalReporter.newCounter(new MetricName("myCounter",
-        ImmutableMap.<String, String>builder().put("application", "Wavefront").build()));
+    Map<String, String> pointTagMap = new HashMap<String, String>() {{
+      put("application", "Wavefront");
+    }};
+    Counter counter = internalReporter.newCounter(new MetricName("myCounter", pointTagMap));
+
     DeltaCounter deltaCounter = internalReporter.newDeltaCounter(
-        new MetricName("myDeltaCounter",
-            ImmutableMap.<String, String>builder().put("application", "Wavefront").build()));
+        new MetricName("myDeltaCounter", pointTagMap));
     AtomicInteger bufferSize = new AtomicInteger();
-    Gauge<Double> gauge = internalReporter.newGauge(new MetricName("myGauge",
-        ImmutableMap.<String, String>builder().put("application", "Wavefront").build()),
+    Gauge<Double> gauge = internalReporter.newGauge(new MetricName("myGauge", pointTagMap),
         () -> (double) bufferSize.get());
-    Meter meter = internalReporter.newMeter(new MetricName("myMeter",
-        ImmutableMap.<String, String>builder().put("application", "Wavefront").build()));
-    Timer timer = internalReporter.newTimer(new MetricName("myTimer",
-        ImmutableMap.<String, String>builder().put("application", "Wavefront").build()));
+    Meter meter = internalReporter.newMeter(new MetricName("myMeter", pointTagMap));
+    Timer timer = internalReporter.newTimer(new MetricName("myTimer", pointTagMap));
     Histogram histogram = internalReporter.newHistogram(new MetricName("myHistogram",
-            ImmutableMap.<String, String>builder().put("application", "Wavefront").build()));
+        pointTagMap));
     WavefrontHistogram wavefrontHistogram = internalReporter.newWavefrontHistogram(
-        new MetricName("myWavefrontHistogram",
-        ImmutableMap.<String, String>builder().put("application", "Wavefront").build()));
+        new MetricName("myWavefrontHistogram", pointTagMap));
 
     for (int i = 0; i < 50; i++) {
       counter.inc();

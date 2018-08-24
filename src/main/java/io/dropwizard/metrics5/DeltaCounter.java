@@ -1,7 +1,5 @@
 package io.dropwizard.metrics5;
 
-import com.google.common.annotations.VisibleForTesting;
-
 import com.wavefront.sdk.common.Constants;
 
 /**
@@ -11,7 +9,6 @@ import com.wavefront.sdk.common.Constants;
  */
 public class DeltaCounter extends Counter {
 
-  @VisibleForTesting
   public static synchronized DeltaCounter get(MetricRegistry registry, MetricName metricName) {
 
     if (registry == null || metricName == null || metricName.getKey().isEmpty()) {

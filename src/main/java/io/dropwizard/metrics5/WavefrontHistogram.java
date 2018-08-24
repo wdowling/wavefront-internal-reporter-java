@@ -1,7 +1,5 @@
 package io.dropwizard.metrics5;
 
-import com.google.common.annotations.VisibleForTesting;
-
 import com.wavefront.sdk.entities.histograms.WavefrontHistogramImpl;
 
 import java.io.OutputStream;
@@ -21,7 +19,6 @@ public class WavefrontHistogram extends Histogram implements Metric {
     return get(registry, metricName, System::currentTimeMillis);
   }
 
-  @VisibleForTesting
   public static synchronized WavefrontHistogram get(MetricRegistry registry,
                                                     MetricName metricName,
                                                     Supplier<Long> clock) {

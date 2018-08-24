@@ -1,7 +1,5 @@
 package com.wavefront.internal.reporter;
 
-import com.google.common.collect.Maps;
-
 import com.wavefront.internal.Entitiesinstantiator;
 import com.wavefront.sdk.common.Constants;
 import com.wavefront.sdk.common.WavefrontSender;
@@ -364,7 +362,7 @@ public class WavefrontInternalReporter implements Reporter, Entitiesinstantiator
     // Example: Global point tag is    <"Key1", "Value-Global">
     // and metric level point tag is:  <"Key1", "Value-Metric1">
     // the point tag sent to Wavefront will be <"Key1", "Value-Metric1">
-    HashMap<String, String> metricTags = Maps.newHashMapWithExpectedSize(tagCount);
+    HashMap<String, String> metricTags = new HashMap<>();
     metricTags.putAll(reporterPointTags);
     metricName.getTags().forEach((k, v) -> metricTags.putIfAbsent(k, v));
     return metricTags;
