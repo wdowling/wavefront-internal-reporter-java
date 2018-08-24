@@ -3,10 +3,8 @@ package com.wavefront.internal.reporter;
 import com.wavefront.internal.Entitiesinstantiator;
 import com.wavefront.sdk.common.Constants;
 import com.wavefront.sdk.common.WavefrontSender;
-import com.wavefront.sdk.direct_ingestion.WavefrontDirectIngestionClient;
 import com.wavefront.sdk.entities.histograms.HistogramGranularity;
 import com.wavefront.sdk.entities.histograms.WavefrontHistogramImpl;
-import com.wavefront.sdk.proxy.WavefrontProxyClient;
 
 import java.io.IOException;
 import java.util.Collections;
@@ -145,28 +143,14 @@ public class WavefrontInternalReporter implements Reporter, Entitiesinstantiator
     }
 
     /**
-     * Builds a {@link WavefrontInternalReporter} with the given properties,
-     * sending metrics directly to a given Wavefront server using direct ingestion APIs.
+     * Builds a {@link WavefrontInternalReporter} with the given properties, sending metrics and
+     * histograms directly to a given Wavefront server using either proxy or direct ingestion APIs.
      *
-     * @param wavefrontDirectIngestionClient Wavefront direct ingestion client
-     *                                       to send various Wavefront atoms.
+     * @param wavefrontSender Wavefront Sender to send various Wavefront atoms.
      * @return a {@link WavefrontInternalReporter}
      */
-    public WavefrontInternalReporter build(
-        WavefrontDirectIngestionClient wavefrontDirectIngestionClient) {
-      return new WavefrontInternalReporter(new MetricRegistry(), wavefrontDirectIngestionClient,
-          prefix, source, reporterPointTags, histogramGranularities);
-    }
-
-    /**
-     * Builds a {@link WavefrontInternalReporter} with the given properties,
-     * sending metrics using the given {@link WavefrontSender}.
-     *
-     * @param wavefrontProxyClient Wavefront proxy client to send various Wavefront atoms.
-     * @return a {@link WavefrontInternalReporter}
-     */
-    public WavefrontInternalReporter build(WavefrontProxyClient wavefrontProxyClient) {
-      return new WavefrontInternalReporter(new MetricRegistry(), wavefrontProxyClient,
+    public WavefrontInternalReporter build(WavefrontSender wavefrontSender) {
+      return new WavefrontInternalReporter(new MetricRegistry(), wavefrontSender,
           prefix, source, reporterPointTags, histogramGranularities);
     }
   }
