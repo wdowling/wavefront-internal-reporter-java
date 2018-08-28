@@ -44,7 +44,7 @@ import io.dropwizard.metrics5.WavefrontHistogram;
  * @author Sushant Dewan (sushant@wavefront.com).
  */
 public class WavefrontInternalReporter implements Reporter, Entitiesinstantiator {
-  private static final Logger LOGGER =
+  private static final Logger logger =
       Logger.getLogger(WavefrontInternalReporter.class.getCanonicalName());
 
   private final ScheduledReporter scheduledReporter;
@@ -212,11 +212,11 @@ public class WavefrontInternalReporter implements Reporter, Entitiesinstantiator
             reportTimer(entry.getKey(), entry.getValue());
           }
         } catch (IOException e) {
-          LOGGER.log(Level.WARNING, "Unable to report to Wavefront", e);
+          logger.log(Level.WARNING, "Unable to report to Wavefront", e);
           try {
             wavefrontSender.close();
           } catch (IOException e1) {
-            LOGGER.log(Level.WARNING, "Error closing Wavefront", e1);
+            logger.log(Level.WARNING, "Error closing Wavefront", e1);
           }
         }
       }
@@ -229,7 +229,7 @@ public class WavefrontInternalReporter implements Reporter, Entitiesinstantiator
           try {
             wavefrontSender.close();
           } catch (IOException e) {
-            LOGGER.log(Level.WARNING, "Error disconnecting from Wavefront", e);
+            logger.log(Level.WARNING, "Error disconnecting from Wavefront", e);
           }
         }
       }
@@ -405,5 +405,14 @@ public class WavefrontInternalReporter implements Reporter, Entitiesinstantiator
   @Override
   public WavefrontHistogram newWavefrontHistogram(MetricName metricName) {
     return WavefrontHistogram.get(internalRegistry, metricName);
+  }
+
+  /**
+   * Get total failure count reported by this reporter
+   *
+   * @return total failure count
+   */
+  public int getFailureCount() {
+    return wavefrontSender.getFailureCount();
   }
 }
