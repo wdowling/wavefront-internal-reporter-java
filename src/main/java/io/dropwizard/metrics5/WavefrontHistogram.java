@@ -19,9 +19,9 @@ public class WavefrontHistogram extends Histogram implements Metric {
     return get(registry, metricName, System::currentTimeMillis);
   }
 
-  public static synchronized WavefrontHistogram get(MetricRegistry registry,
-                                                    MetricName metricName,
-                                                    Supplier<Long> clock) {
+  public static WavefrontHistogram get(MetricRegistry registry,
+                                       MetricName metricName,
+                                       Supplier<Long> clock) {
     // Awkward construction trying to fit in with Dropwizard Histogram
     TDigestReservoir reservoir = new TDigestReservoir();
     WavefrontHistogram tDigestHistogram = new WavefrontHistogram(reservoir, clock);
