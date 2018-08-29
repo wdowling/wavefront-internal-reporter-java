@@ -17,6 +17,13 @@ public interface Reporter {
   void start(long period, TimeUnit unit);
 
   /**
+   * Get total failure count reported by this reporter
+   *
+   * @return total failure count
+   */
+  int getFailureCount();
+
+  /**
    * Stop the Wavefront Internal Reporter
    */
   void stop();

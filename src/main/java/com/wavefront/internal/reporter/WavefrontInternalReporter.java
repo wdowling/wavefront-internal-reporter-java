@@ -407,11 +407,7 @@ public class WavefrontInternalReporter implements Reporter, Entitiesinstantiator
     return WavefrontHistogram.get(internalRegistry, metricName);
   }
 
-  /**
-   * Get total failure count reported by this reporter
-   *
-   * @return total failure count
-   */
+  @Override
   public int getFailureCount() {
     return wavefrontSender.getFailureCount();
   }
