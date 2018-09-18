@@ -1,1 +1,1 @@
-# wavefront-internal-reporter-java
+# wavefront-internal-reporter-java [![travis build status](https://travis-ci.com/wavefrontHQ/wavefront-internal-reporter-java.svg?branch=master)](https://travis-ci.com/wavefrontHQ/wavefront-internal-reporter-java)
