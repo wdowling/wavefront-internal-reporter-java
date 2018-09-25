@@ -17,7 +17,7 @@ import io.dropwizard.metrics5.WavefrontHistogram;
  *
  * @author Sushant Dewan (sushant@wavefront.com).
  */
-public interface Entitiesinstantiator {
+public interface EntitiesInstantiator {
 
   /**
    * Returns a new counter
