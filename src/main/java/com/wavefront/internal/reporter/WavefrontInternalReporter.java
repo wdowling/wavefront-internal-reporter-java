@@ -1,6 +1,6 @@
 package com.wavefront.internal.reporter;
 
-import com.wavefront.internal.Entitiesinstantiator;
+import com.wavefront.internal.EntitiesInstantiator;
 import com.wavefront.sdk.common.Constants;
 import com.wavefront.sdk.common.WavefrontSender;
 import com.wavefront.sdk.entities.histograms.HistogramGranularity;
@@ -43,7 +43,7 @@ import io.dropwizard.metrics5.WavefrontHistogram;
  *
  * @author Sushant Dewan (sushant@wavefront.com).
  */
-public class WavefrontInternalReporter implements Reporter, Entitiesinstantiator {
+public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator {
   private static final Logger logger =
       Logger.getLogger(WavefrontInternalReporter.class.getCanonicalName());
 
