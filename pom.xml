@@ -97,8 +97,8 @@
         </dependency>
         <dependency>
             <groupId>com.wavefront</groupId>
-            <artifactId>java-sdk</artifactId>
-            <version>0.9.0</version>
+            <artifactId>wavefront-sdk-java</artifactId>
+            <version>0.9.0-SNAPSHOT</version>
         </dependency>
     </dependencies>
 
