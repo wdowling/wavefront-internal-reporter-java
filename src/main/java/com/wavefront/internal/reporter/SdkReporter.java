@@ -39,4 +39,14 @@ public interface SdkReporter {
    * @param value              Value of the gauge.
    */
   void registerGauge(MetricName metricName, AtomicInteger value);
+
+  /**
+   * Start the reporter.
+   */
+  void start();
+
+  /**
+   * Stop the reporter.
+   */
+  void stop();
 }
