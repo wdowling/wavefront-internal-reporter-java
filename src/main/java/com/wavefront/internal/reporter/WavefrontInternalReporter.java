@@ -7,6 +7,7 @@ import com.wavefront.sdk.entities.histograms.HistogramGranularity;
 import com.wavefront.sdk.entities.histograms.WavefrontHistogramImpl;
 
 import java.io.IOException;
+import java.lang.management.ManagementFactory;
 import java.util.Collections;
 import java.util.HashMap;
 import java.util.HashSet;
@@ -27,6 +28,7 @@ import io.dropwizard.metrics5.Gauge;
 import io.dropwizard.metrics5.Histogram;
 import io.dropwizard.metrics5.Meter;
 import io.dropwizard.metrics5.Metered;
+import io.dropwizard.metrics5.Metric;
 import io.dropwizard.metrics5.MetricAttribute;
 import io.dropwizard.metrics5.MetricFilter;
 import io.dropwizard.metrics5.MetricName;
@@ -35,6 +37,12 @@ import io.dropwizard.metrics5.ScheduledReporter;
 import io.dropwizard.metrics5.Snapshot;
 import io.dropwizard.metrics5.Timer;
 import io.dropwizard.metrics5.WavefrontHistogram;
+import io.dropwizard.metrics5.jvm.BufferPoolMetricSet;
+import io.dropwizard.metrics5.jvm.ClassLoadingGaugeSet;
+import io.dropwizard.metrics5.jvm.FileDescriptorRatioGauge;
+import io.dropwizard.metrics5.jvm.GarbageCollectorMetricSet;
+import io.dropwizard.metrics5.jvm.MemoryUsageGaugeSet;
+import io.dropwizard.metrics5.jvm.ThreadStatesGaugeSet;
 
 /**
  * Wavefront Internal Reporter that reports metrics and histograms to Wavefront via proxy or
@@ -59,6 +67,7 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
     private String source;
     private final Map<String, String> reporterPointTags;
     private final Set<HistogramGranularity> histogramGranularities;
+    private boolean includeJvmMetrics = false;
 
     public Builder() {
       this.prefix = null;
@@ -143,6 +152,16 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
     }
 
     /**
+     * Report JVM metrics for the JVM inside which this reporter is running.
+     *
+     * @return {@code this}
+     */
+    public Builder includeJvmMetrics() {
+      this.includeJvmMetrics = true;
+      return this;
+    }
+
+    /**
      * Builds a {@link WavefrontInternalReporter} with the given properties, sending metrics and
      * histograms directly to a given Wavefront server using either proxy or direct ingestion APIs.
      *
@@ -151,7 +170,7 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
      */
     public WavefrontInternalReporter build(WavefrontSender wavefrontSender) {
       return new WavefrontInternalReporter(new MetricRegistry(), wavefrontSender,
-          prefix, source, reporterPointTags, histogramGranularities);
+          prefix, source, reporterPointTags, histogramGranularities, includeJvmMetrics);
     }
   }
 
@@ -167,7 +186,8 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
                                     String prefix,
                                     String source,
                                     Map<String, String> reporterPointTags,
-                                    Set<HistogramGranularity> histogramGranularities) {
+                                    Set<HistogramGranularity> histogramGranularities,
+                                    boolean includeJvmMetrics) {
     internalRegistry = registry;
     scheduledReporter = new ScheduledReporter(registry, "wavefront-reporter", MetricFilter.ALL,
         TimeUnit.SECONDS, TimeUnit.MILLISECONDS, Executors.newSingleThreadScheduledExecutor(),
@@ -240,6 +260,29 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
     this.source = source;
     this.reporterPointTags = reporterPointTags;
     this.histogramGranularities = histogramGranularities;
+
+    if (includeJvmMetrics) {
+      tryRegister(registry, "jvm.uptime",
+          (Gauge<Long>) () -> ManagementFactory.getRuntimeMXBean().getUptime());
+      tryRegister(registry, "jvm.current_time", (Gauge<Long>) clock::getTime);
+      tryRegister(registry, "jvm.classes", new ClassLoadingGaugeSet());
+      tryRegister(registry, "jvm.fd_usage", new FileDescriptorRatioGauge());
+      tryRegister(registry, "jvm.buffers",
+          new BufferPoolMetricSet(ManagementFactory.getPlatformMBeanServer()));
+      tryRegister(registry, "jvm.gc", new GarbageCollectorMetricSet());
+      tryRegister(registry, "jvm.memory", new MemoryUsageGaugeSet());
+      tryRegister(registry, "jvm.thread-states", new ThreadStatesGaugeSet());
+    }
+  }
+
+  private <T extends Metric> void tryRegister(MetricRegistry registry, String name, T metric) {
+    // Dropwizard services automatically include JVM metrics,
+    // so adding them again would throw an exception
+    try {
+      registry.register(name, metric);
+    } catch (IllegalArgumentException e) {
+      logger.log(Level.INFO, e.getMessage());
+    }
   }
 
   private void reportTimer(MetricName metricName, Timer timer) throws IOException {
@@ -348,7 +391,7 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
     // the point tag sent to Wavefront will be <"Key1", "Value-Metric1">
     HashMap<String, String> metricTags = new HashMap<>();
     metricTags.putAll(reporterPointTags);
-    metricName.getTags().forEach((k, v) -> metricTags.putIfAbsent(k, v));
+    metricName.getTags().forEach(metricTags::putIfAbsent);
     return metricTags;
   }
 
@@ -384,7 +427,7 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
 
   @Override
   public Gauge<Double> newGauge(MetricName metricName, Supplier<Double> supplier) {
-    return internalRegistry.register(metricName, () -> supplier.get());
+    return internalRegistry.register(metricName, supplier::get);
   }
 
   @Override
