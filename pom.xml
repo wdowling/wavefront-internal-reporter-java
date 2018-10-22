@@ -61,8 +61,10 @@
                         <configuration>
                             <minimizeJar>true</minimizeJar>
                             <artifactSet>
-                                <excludes>
-                                </excludes>
+                                <includes>
+                                    <include>io.dropwizard.metrics5</include>
+                                    <include>org.slf4j</include>
+                                </includes>
                             </artifactSet>
                             <relocations>
                                 <relocation>
@@ -100,7 +102,6 @@
             <artifactId>metrics-jvm</artifactId>
             <version>${io.dropwizard.metrics5.version}</version>
         </dependency>
-
         <dependency>
             <groupId>com.wavefront</groupId>
             <artifactId>wavefront-sdk-java</artifactId>
