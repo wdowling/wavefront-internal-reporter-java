@@ -1,4 +1,4 @@
-package com.wavefront.internal;
+package com.wavefront;
 
 import com.wavefront.internal.reporter.WavefrontInternalReporter;
 import com.wavefront.sdk.direct_ingestion.WavefrontDirectIngestionClient;
