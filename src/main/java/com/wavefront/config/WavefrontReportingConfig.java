@@ -58,12 +58,6 @@ public class WavefrontReportingConfig {
   @JsonProperty
   private int proxyTracingPort;
 
-  /**
-   * Interval at which to report telemetry data.
-   */
-  @JsonProperty
-  private int flushIntervalSeconds = 10;
-
   @Nonnull
   public String getReportingMechanism() {
     return reportingMechanism;
@@ -87,10 +81,6 @@ public class WavefrontReportingConfig {
 
   public int getProxyDistributionsPort() {
     return proxyDistributionsPort;
-  }
-
-  public int getFlushIntervalSeconds() {
-    return flushIntervalSeconds;
   }
 
   public int getProxyTracingPort() {

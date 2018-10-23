@@ -12,7 +12,7 @@ import javax.annotation.Nullable;
  *
  * @author Sushant Dewan (sushant@wavefront.com).
  */
-public class ApplicationTags {
+public class ApplicationTagsConfig {
 
   /**
    * Name of the application.
