@@ -73,4 +73,24 @@ public class ApplicationTagsConfig {
   public Map<String, String> getCustomTags() {
     return customTags;
   }
+
+  public void setApplication(@Nonnull String application) {
+    this.application = application;
+  }
+
+  public void setService(@Nonnull String service) {
+    this.service = service;
+  }
+
+  public void setCluster(@Nullable String cluster) {
+    this.cluster = cluster;
+  }
+
+  public void setShard(@Nullable String shard) {
+    this.shard = shard;
+  }
+
+  public void setCustomTags(@Nullable Map<String, String> customTags) {
+    this.customTags = customTags;
+  }
 }

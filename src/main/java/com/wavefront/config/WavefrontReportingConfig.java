@@ -86,4 +86,32 @@ public class WavefrontReportingConfig {
   public int getProxyTracingPort() {
     return proxyTracingPort;
   }
+
+  public void setReportingMechanism(@Nonnull String reportingMechanism) {
+    this.reportingMechanism = reportingMechanism;
+  }
+
+  public void setServer(String server) {
+    this.server = server;
+  }
+
+  public void setToken(String token) {
+    this.token = token;
+  }
+
+  public void setProxyHost(String proxyHost) {
+    this.proxyHost = proxyHost;
+  }
+
+  public void setProxyMetricsPort(int proxyMetricsPort) {
+    this.proxyMetricsPort = proxyMetricsPort;
+  }
+
+  public void setProxyDistributionsPort(int proxyDistributionsPort) {
+    this.proxyDistributionsPort = proxyDistributionsPort;
+  }
+
+  public void setProxyTracingPort(int proxyTracingPort) {
+    this.proxyTracingPort = proxyTracingPort;
+  }
 }
