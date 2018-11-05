@@ -1,7 +1,7 @@
 package com.wavefront;
 
 import com.wavefront.internal.reporter.WavefrontInternalReporter;
-import com.wavefront.sdk.direct_ingestion.WavefrontDirectIngestionClient;
+import com.wavefront.sdk.direct.ingestion.WavefrontDirectIngestionClient;
 import com.wavefront.sdk.proxy.WavefrontProxyClient;
 
 import java.io.IOException;
