@@ -10,7 +10,7 @@
     <packaging>jar</packaging>
 
     <name>Wavefront Internal Reporter for Java</name>
-    <description>Use this internal reporter to report metrics and histograms to Wavefront</description>
+    <description>Internal reporter for reporting metrics and histograms to Wavefront</description>
     <url>https://github.com/wavefrontHQ/wavefront-internal-reporter-java</url>
     <licenses>
         <license>
@@ -105,8 +105,7 @@
         <dependency>
             <groupId>com.wavefront</groupId>
             <artifactId>wavefront-sdk-java</artifactId>
-            <!--TODO: change the snapshot version to 1.0 -->
-            <version>1.0-SNAPSHOT</version>
+            <version>1.0</version>
         </dependency>
         <dependency>
             <groupId>com.fasterxml.jackson.core</groupId>
