@@ -58,6 +58,13 @@ public class WavefrontReportingConfig {
   @JsonProperty
   private int proxyTracingPort;
 
+  /**
+   * Source field that needs to be emitted when you report metrics, histograms and tracing spans
+   * to Wavefront.
+   */
+  @JsonProperty
+  private String source;
+
   @Nonnull
   public String getReportingMechanism() {
     return reportingMechanism;
@@ -87,6 +94,10 @@ public class WavefrontReportingConfig {
     return proxyTracingPort;
   }
 
+  public String getSource() {
+    return source;
+  }
+
   public void setReportingMechanism(@Nonnull String reportingMechanism) {
     this.reportingMechanism = reportingMechanism;
   }
@@ -113,5 +124,9 @@ public class WavefrontReportingConfig {
 
   public void setProxyTracingPort(int proxyTracingPort) {
     this.proxyTracingPort = proxyTracingPort;
+  }
+
+  public void setSource(String source) {
+    this.source = source;
   }
 }
