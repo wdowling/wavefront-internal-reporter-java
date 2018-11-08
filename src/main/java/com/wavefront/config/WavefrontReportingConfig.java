@@ -65,6 +65,14 @@ public class WavefrontReportingConfig {
   @JsonProperty
   private String source;
 
+  /**
+   * Set to true/false depending on whether you want to instrument your application to emit traces
+   * to Wavefront. If true, traces will be reported, else traces won't be reported to Wavefront.
+   * Defaults to false if not set.
+   */
+  @JsonProperty
+  private Boolean reportTraces;
+
   @Nonnull
   public String getReportingMechanism() {
     return reportingMechanism;
@@ -98,6 +106,10 @@ public class WavefrontReportingConfig {
     return source;
   }
 
+  public Boolean getReportTraces() {
+    return reportTraces;
+  }
+
   public void setReportingMechanism(@Nonnull String reportingMechanism) {
     this.reportingMechanism = reportingMechanism;
   }
@@ -128,5 +140,9 @@ public class WavefrontReportingConfig {
 
   public void setSource(String source) {
     this.source = source;
+  }
+
+  public void setReportTraces(Boolean reportTraces) {
+    this.reportTraces = reportTraces;
   }
 }
