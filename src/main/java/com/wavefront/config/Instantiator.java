@@ -11,7 +11,7 @@ import com.wavefront.sdk.direct.ingestion.WavefrontDirectIngestionClient;
 import java.io.File;
 import java.io.IOException;
 
-public class Constructor {
+public class Instantiator {
   public static WavefrontSender constructWavefrontSender(
       WavefrontReportingConfig wfReportingConfig) {
     String reportingMechanism = wfReportingConfig.getReportingMechanism();
