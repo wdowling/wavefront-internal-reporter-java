@@ -11,7 +11,15 @@ import com.wavefront.sdk.direct.ingestion.WavefrontDirectIngestionClient;
 import java.io.File;
 import java.io.IOException;
 
+/**
+ * Reporting Util methods
+ *
+ * @author Hao Song (songhao@vmware.com).
+ */
 public class ReportingUtils {
+  /**
+   * Construct {@link WavefrontSender) from {@link WavefrontReportingConfig}
+   */
   public static WavefrontSender constructWavefrontSender(
       WavefrontReportingConfig wfReportingConfig) {
     String reportingMechanism = wfReportingConfig.getReportingMechanism();
@@ -29,6 +37,9 @@ public class ReportingUtils {
     }
   }
 
+  /**
+   * Construct {@link ApplicationTags} from given path of YAML file
+   */
   public static ApplicationTags constructApplicationTags(String applicationTagsYamlFile) {
     YAMLFactory factory = new YAMLFactory(new ObjectMapper());
     YAMLParser parser;
@@ -62,6 +73,9 @@ public class ReportingUtils {
     return applicationTagsBuilder.build();
   }
 
+  /**
+   * Construct {@link WavefrontReportingConfig} from given path of YAML file
+   */
   public static WavefrontReportingConfig constructWavefrontReportingConfig(
       String wfReportingConfigYamlFile) {
     YAMLFactory factory = new YAMLFactory(new ObjectMapper());
