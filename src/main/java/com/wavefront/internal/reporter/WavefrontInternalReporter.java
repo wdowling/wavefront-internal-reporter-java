@@ -451,6 +451,11 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
   }
 
   @Override
+  public WavefrontHistogram newWavefrontHistogram(MetricName metricName, Supplier<Long> clock) {
+    return WavefrontHistogram.get(internalRegistry, metricName, clock);
+  }
+
+  @Override
   public int getFailureCount() {
     return wavefrontSender.getFailureCount();
   }

@@ -75,4 +75,13 @@ public interface EntitiesInstantiator {
    * @return WavefrontHistogram
    */
   WavefrontHistogram newWavefrontHistogram(MetricName metricName);
+
+  /**
+   * Returns a new WavefrontHistogram
+   *
+   * @param metricName  entity composed of name and optional point tags
+   * @param clock       optional clock to change time manually
+   * @return WavefrontHistogram
+   */
+  WavefrontHistogram newWavefrontHistogram(MetricName metricName, Supplier<Long> clock);
 }
