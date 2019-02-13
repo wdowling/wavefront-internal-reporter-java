@@ -2,6 +2,9 @@ package com.wavefront.config;
 
 import com.fasterxml.jackson.annotation.JsonProperty;
 
+import java.net.InetAddress;
+import java.net.UnknownHostException;
+
 import javax.annotation.Nonnull;
 
 /**
@@ -11,7 +14,6 @@ import javax.annotation.Nonnull;
  * @author Srujan Narkedamalli (snarkedamall@wavefront.com).
  */
 public class WavefrontReportingConfig {
-
   public final static String proxyReporting = "proxy";
   public final static String directReporting = "direct";
 
@@ -60,10 +62,10 @@ public class WavefrontReportingConfig {
 
   /**
    * Source field that needs to be emitted when you report metrics, histograms and tracing spans
-   * to Wavefront.
+   * to Wavefront. Set to hostname by default.
    */
   @JsonProperty
-  private String source;
+  private String source = getDefaultSource();
 
   /**
    * Set to true/false depending on whether you want to instrument your application to emit traces
@@ -144,5 +146,13 @@ public class WavefrontReportingConfig {
 
   public void setReportTraces(Boolean reportTraces) {
     this.reportTraces = reportTraces;
+  }
+
+  private String getDefaultSource() {
+    try {
+      return InetAddress.getLocalHost().getHostName();
+    } catch (UnknownHostException ex) {
+      return "wavefront-sdk-default";
+    }
   }
 }
