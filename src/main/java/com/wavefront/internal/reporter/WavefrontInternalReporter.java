@@ -259,24 +259,6 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
         } catch (IOException e) {
           reportErrors.inc();
           logger.log(Level.WARNING, "Unable to report to Wavefront", e);
-          try {
-            wavefrontSender.close();
-          } catch (IOException e1) {
-            logger.log(Level.WARNING, "Error closing Wavefront", e1);
-          }
-        }
-      }
-
-      @Override
-      public void stop() {
-        try {
-          super.stop();
-        } finally {
-          try {
-            wavefrontSender.close();
-          } catch (IOException e) {
-            logger.log(Level.WARNING, "Error disconnecting from Wavefront", e);
-          }
         }
       }
     };
