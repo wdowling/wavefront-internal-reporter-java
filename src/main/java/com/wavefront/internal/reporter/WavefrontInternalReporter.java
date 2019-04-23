@@ -185,7 +185,9 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
   private final WavefrontSdkMetricsRegistry sdkMetricsRegistry;
 
   private final WavefrontSdkCounter gaugesReported;
+  private final WavefrontSdkCounter deltaCountersReported;
   private final WavefrontSdkCounter countersReported;
+  private final WavefrontSdkCounter wfHistogramsReported;
   private final WavefrontSdkCounter histogramsReported;
   private final WavefrontSdkCounter metersReported;
   private final WavefrontSdkCounter timersReported;
@@ -229,12 +231,20 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
 
           for (Map.Entry<MetricName, Counter> entry : counters.entrySet()) {
             reportCounter(entry.getKey(), entry.getValue());
-            countersReported.inc();
+            if (entry.getValue() instanceof DeltaCounter) {
+              deltaCountersReported.inc();
+            } else {
+              countersReported.inc();
+            }
           }
 
           for (Map.Entry<MetricName, Histogram> entry : histograms.entrySet()) {
             reportHistogram(entry.getKey(), entry.getValue());
-            histogramsReported.inc();
+            if (entry.getValue() instanceof WavefrontHistogram) {
+              wfHistogramsReported.inc();
+            } else {
+              histogramsReported.inc();
+            }
           }
 
           for (Map.Entry<MetricName, Meter> entry : meters.entrySet()) {
@@ -297,7 +307,9 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
             build();
 
     gaugesReported = sdkMetricsRegistry.newCounter("gauges.reported");
+    deltaCountersReported = sdkMetricsRegistry.newCounter("delta_counters.reported");
     countersReported = sdkMetricsRegistry.newCounter("counters.reported");
+    wfHistogramsReported = sdkMetricsRegistry.newCounter("wavefront_histograms.reported");
     histogramsReported = sdkMetricsRegistry.newCounter("histograms.reported");
     metersReported = sdkMetricsRegistry.newCounter("meters.reported");
     timersReported = sdkMetricsRegistry.newCounter("timers.reported");
