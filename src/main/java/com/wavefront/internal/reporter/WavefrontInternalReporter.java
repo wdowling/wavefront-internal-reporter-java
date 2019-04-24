@@ -3,6 +3,8 @@ package com.wavefront.internal.reporter;
 import com.wavefront.internal.EntitiesInstantiator;
 import com.wavefront.sdk.common.Constants;
 import com.wavefront.sdk.common.WavefrontSender;
+import com.wavefront.sdk.common.metrics.WavefrontSdkCounter;
+import com.wavefront.sdk.common.metrics.WavefrontSdkMetricsRegistry;
 import com.wavefront.sdk.entities.histograms.HistogramGranularity;
 import com.wavefront.sdk.entities.histograms.WavefrontHistogramImpl;
 
@@ -180,6 +182,16 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
   private final String source;
   private final Map<String, String> reporterPointTags;
   private final Set<HistogramGranularity> histogramGranularities;
+  private final WavefrontSdkMetricsRegistry sdkMetricsRegistry;
+
+  private final WavefrontSdkCounter gaugesReported;
+  private final WavefrontSdkCounter deltaCountersReported;
+  private final WavefrontSdkCounter countersReported;
+  private final WavefrontSdkCounter wfHistogramsReported;
+  private final WavefrontSdkCounter histogramsReported;
+  private final WavefrontSdkCounter metersReported;
+  private final WavefrontSdkCounter timersReported;
+  private final WavefrontSdkCounter reportErrors;
 
   private WavefrontInternalReporter(MetricRegistry registry,
                                     WavefrontSender wavefrontSender,
@@ -213,44 +225,40 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
           for (Map.Entry<MetricName, Gauge> entry : gauges.entrySet()) {
             if (entry.getValue().getValue() instanceof Number) {
               reportGauge(entry.getKey(), entry.getValue());
+              gaugesReported.inc();
             }
           }
 
           for (Map.Entry<MetricName, Counter> entry : counters.entrySet()) {
             reportCounter(entry.getKey(), entry.getValue());
+            if (entry.getValue() instanceof DeltaCounter) {
+              deltaCountersReported.inc();
+            } else {
+              countersReported.inc();
+            }
           }
 
           for (Map.Entry<MetricName, Histogram> entry : histograms.entrySet()) {
             reportHistogram(entry.getKey(), entry.getValue());
+            if (entry.getValue() instanceof WavefrontHistogram) {
+              wfHistogramsReported.inc();
+            } else {
+              histogramsReported.inc();
+            }
           }
 
           for (Map.Entry<MetricName, Meter> entry : meters.entrySet()) {
             reportMetered(entry.getKey(), entry.getValue());
+            metersReported.inc();
           }
 
           for (Map.Entry<MetricName, Timer> entry : timers.entrySet()) {
             reportTimer(entry.getKey(), entry.getValue());
+            timersReported.inc();
           }
         } catch (IOException e) {
+          reportErrors.inc();
           logger.log(Level.WARNING, "Unable to report to Wavefront", e);
-          try {
-            wavefrontSender.close();
-          } catch (IOException e1) {
-            logger.log(Level.WARNING, "Error closing Wavefront", e1);
-          }
-        }
-      }
-
-      @Override
-      public void stop() {
-        try {
-          super.stop();
-        } finally {
-          try {
-            wavefrontSender.close();
-          } catch (IOException e) {
-            logger.log(Level.WARNING, "Error disconnecting from Wavefront", e);
-          }
         }
       }
     };
@@ -273,6 +281,21 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
       tryRegister(registry, "jvm.memory", new MemoryUsageGaugeSet());
       tryRegister(registry, "jvm.thread-states", new ThreadStatesGaugeSet());
     }
+
+    sdkMetricsRegistry = new WavefrontSdkMetricsRegistry.Builder(this.wavefrontSender).
+            prefix(Constants.SDK_METRIC_PREFIX + ".internal_reporter").
+            source(this.source).
+            tags(this.reporterPointTags).
+            build();
+
+    gaugesReported = sdkMetricsRegistry.newCounter("gauges.reported");
+    deltaCountersReported = sdkMetricsRegistry.newCounter("delta_counters.reported");
+    countersReported = sdkMetricsRegistry.newCounter("counters.reported");
+    wfHistogramsReported = sdkMetricsRegistry.newCounter("wavefront_histograms.reported");
+    histogramsReported = sdkMetricsRegistry.newCounter("histograms.reported");
+    metersReported = sdkMetricsRegistry.newCounter("meters.reported");
+    timersReported = sdkMetricsRegistry.newCounter("timers.reported");
+    reportErrors = sdkMetricsRegistry.newCounter("errors");
   }
 
   private <T extends Metric> void tryRegister(MetricRegistry registry, String name, T metric) {
