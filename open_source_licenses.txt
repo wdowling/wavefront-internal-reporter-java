@@ -1,6 +1,6 @@
 open_source_licenses.txt
 
-Wavefront Internal Reporter for Java 0.9.2 GA
+Wavefront Internal Reporter for Java 0.9.3 GA
 
 ======================================================================
 
@@ -273,6 +273,7 @@ Released under the Creative Commons Attribution License
 Official home: http://www.jcip.net
 
 
+
 =============== APPENDIX. Standard License Files ============== 
 
 
@@ -451,8 +452,8 @@ hold each Contributor harmless for any liability incurred by, or claims
 asserted against, such Contributor by reason of your accepting any such
 warranty or additional liability.
 
-END OF TERMS AND CONDITIONS 
-
+END OF TERMS AND CONDITIONS 
+
 --------------- SECTION 2: Creative Commons Attribution 2.5  -----------
 
 CREATIVE COMMONS CORPORATION IS NOT A LAW FIRM AND DOES NOT PROVIDE LEGAL SERVICES. DISTRIBUTION OF THIS LICENSE DOES NOT CREATE AN ATTORNEY-CLIENT RELATIONSHIP. CREATIVE COMMONS PROVIDES THIS INFORMATION ON AN "AS-IS" BASIS. CREATIVE COMMONS MAKES NO WARRANTIES REGARDING THE INFORMATION PROVIDED, AND DISCLAIMS LIABILITY FOR DAMAGES RESULTING FROM ITS USE.
@@ -536,4 +537,4 @@ Source Files is valid for three years from the date you acquired or last used th
 Software product. Alternatively, the Source Files may accompany the
 VMware service.
 
-[WAVEFRONTINTERNALREPORTERJAVA092GANT021319]
+[WAVEFRONTINTERNALREPORTERJAVA093GAAB042519]
