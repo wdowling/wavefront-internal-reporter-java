@@ -413,8 +413,8 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
     // and metric level point tag is:  <"Key1", "Value-Metric1">
     // the point tag sent to Wavefront will be <"Key1", "Value-Metric1">
     HashMap<String, String> metricTags = new HashMap<>();
-    metricTags.putAll(reporterPointTags);
-    metricName.getTags().forEach(metricTags::putIfAbsent);
+    metricTags.putAll(metricName.getTags());
+    reporterPointTags.forEach(metricTags::putIfAbsent);
     return metricTags;
   }
 
