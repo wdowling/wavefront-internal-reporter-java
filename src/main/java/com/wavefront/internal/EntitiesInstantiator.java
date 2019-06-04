@@ -8,6 +8,7 @@ import io.dropwizard.metrics5.Gauge;
 import io.dropwizard.metrics5.Histogram;
 import io.dropwizard.metrics5.Meter;
 import io.dropwizard.metrics5.MetricName;
+import io.dropwizard.metrics5.MetricRegistry;
 import io.dropwizard.metrics5.Timer;
 import io.dropwizard.metrics5.WavefrontHistogram;
 
@@ -36,13 +37,13 @@ public interface EntitiesInstantiator {
   DeltaCounter newDeltaCounter(MetricName metricName);
 
   /**
-   * Returns a new Gauge
+   * Returns a new Gauge in idempotent manner.
    *
    * @param metricName  entity composed of name and optional point tags
    * @param supplier
    * @return Gauge
    */
-  Gauge<Double> newGauge(MetricName metricName, Supplier<Double> supplier);
+  Gauge newGauge(MetricName metricName, MetricRegistry.MetricSupplier<Gauge> supplier);
 
   /**
    * Returns a histogram

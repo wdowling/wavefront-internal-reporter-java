@@ -16,6 +16,7 @@ import io.dropwizard.metrics5.Gauge;
 import io.dropwizard.metrics5.Histogram;
 import io.dropwizard.metrics5.Meter;
 import io.dropwizard.metrics5.MetricName;
+import io.dropwizard.metrics5.MetricRegistry;
 import io.dropwizard.metrics5.Timer;
 import io.dropwizard.metrics5.WavefrontHistogram;
 
@@ -93,8 +94,11 @@ public class Main {
     DeltaCounter deltaCounter = internalReporter.newDeltaCounter(
         new MetricName("myDeltaCounter", pointTagMap));
     AtomicInteger bufferSize = new AtomicInteger();
-    Gauge<Double> gauge = internalReporter.newGauge(new MetricName("myGauge", pointTagMap),
-        () -> (double) bufferSize.get());
+    Gauge genericGauge = internalReporter.newGauge(new MetricName("myGauge", pointTagMap),
+        () -> () -> (double) bufferSize.get());
+    // Unchecked assignment (cannnot prevent this with current WavefrontInternalReporter design).
+    Gauge<Double> doubleGauge = genericGauge;
+    System.out.println("Current gauge value: " + doubleGauge.getValue());
     Meter meter = internalReporter.newMeter(new MetricName("myMeter", pointTagMap));
     Timer timer = internalReporter.newTimer(new MetricName("myTimer", pointTagMap));
     Histogram histogram = internalReporter.newHistogram(new MetricName("myHistogram",
