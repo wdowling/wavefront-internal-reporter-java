@@ -449,8 +449,8 @@ public class WavefrontInternalReporter implements Reporter, EntitiesInstantiator
   }
 
   @Override
-  public Gauge<Double> newGauge(MetricName metricName, Supplier<Double> supplier) {
-    return internalRegistry.register(metricName, supplier::get);
+  public Gauge newGauge(MetricName metricName, MetricRegistry.MetricSupplier<Gauge> supplier) {
+    return internalRegistry.gauge(metricName, supplier);
   }
 
   @Override
