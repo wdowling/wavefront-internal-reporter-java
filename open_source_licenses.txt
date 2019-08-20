@@ -1,6 +1,6 @@
 open_source_licenses.txt
 
-Wavefront Internal Reporter for Java 0.9.8 GA
+Wavefront Internal Reporter for Java 1.0 GA
 
 ======================================================================
 
@@ -30,7 +30,7 @@ SECTION 1: Apache License, V2.0
    >>> com.fasterxml.jackson.core:jackson-annotations-2.9.0
    >>> com.fasterxml.jackson.core:jackson-annotations-2.9.9
    >>> com.fasterxml.jackson.core:jackson-core-2.9.9
-   >>> com.fasterxml.jackson.core:jackson-databind-2.9.9
+   >>> com.fasterxml.jackson.core:jackson-databind-2.9.9.3
    >>> com.fasterxml.jackson.dataformat:jackson-dataformat-yaml-2.9.9
    >>> com.tdunning:t-digest-3.2
    >>> io.dropwizard.metrics5:metrics-core-5.0.0-rc2
@@ -117,7 +117,7 @@ http://www.apache.org/licenses/LICENSE-2.0
 
 
 
->>> com.fasterxml.jackson.core:jackson-databind-2.9.9
+>>> com.fasterxml.jackson.core:jackson-databind-2.9.9.3
 
 # Jackson JSON processor
 
@@ -446,8 +446,8 @@ hold each Contributor harmless for any liability incurred by, or claims
 asserted against, such Contributor by reason of your accepting any such
 warranty or additional liability.
 
-END OF TERMS AND CONDITIONS 
-
+END OF TERMS AND CONDITIONS 
+
 
 --------------- SECTION 2: Creative Commons Attribution 2.5  -----------
 
@@ -512,7 +512,6 @@ UNLESS OTHERWISE MUTUALLY AGREED TO BY THE PARTIES IN WRITING, LICENSOR OFFERS T
     If any provision of this License is invalid or unenforceable under applicable law, it shall not affect the validity or enforceability of the remainder of the terms of this License, and without further action by the parties to this agreement, such provision shall be reformed to the minimum extent necessary to make such provision valid and enforceable.
     No term or provision of this License shall be deemed waived and no breach consented to unless such waiver or consent shall be in writing and signed by the party to be charged with such waiver or consent.
     This License constitutes the entire agreement between the parties with respect to the Work licensed here. There are no understandings, agreements or representations with respect to the Work not specified here. Licensor shall not be bound by any additional provisions that may appear in any communication from You. This License may not be modified without the mutual written agreement of the Licensor and You.
-	
 
 ======================================================================
 
@@ -532,4 +531,4 @@ Source Files is valid for three years from the date you acquired or last used th
 Software product. Alternatively, the Source Files may accompany the
 VMware service.
 
-[WAVEFRONTINTERNALREPORTERJAVA098GANT061719]
+[WAVEFRONTINTERNALREPORTERJAVA10GAMS082019]
