@@ -38,23 +38,38 @@ public class ReportingUtils {
   }
 
   /**
-   * Construct {@link ApplicationTags} from given path of YAML file
+   * Construct {@link WavefrontReportingConfig} from given path of YAML file
    */
-  public static ApplicationTags constructApplicationTags(String applicationTagsYamlFile) {
+  public static WavefrontReportingConfig constructWavefrontReportingConfig(
+      String wfReportingConfigYamlFile) {
     YAMLFactory factory = new YAMLFactory(new ObjectMapper());
     YAMLParser parser;
     try {
-      parser = factory.createParser(new File(applicationTagsYamlFile));
+      parser = factory.createParser(new File(wfReportingConfigYamlFile));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
-    ApplicationTagsConfig applicationTagsConfig;
     try {
-      applicationTagsConfig = parser.readValueAs(ApplicationTagsConfig.class);
+      return parser.readValueAs(WavefrontReportingConfig.class);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
+  }
 
+  /**
+   * Construct {@link ApplicationTags} from given path of YAML file
+   */
+  public static ApplicationTags constructApplicationTags(String applicationTagsYamlFile) {
+    ApplicationTagsConfig applicationTagsConfig =
+        constructApplicationTagsConfig(applicationTagsYamlFile);
+    return constructApplicationTags(applicationTagsConfig);
+  }
+
+  /**
+   * Construct {@link ApplicationTags} from {@link ApplicationTagsConfig}
+   */
+  public static ApplicationTags constructApplicationTags(
+      ApplicationTagsConfig applicationTagsConfig) {
     ApplicationTags.Builder applicationTagsBuilder = new ApplicationTags.Builder(
         applicationTagsConfig.getApplication(), applicationTagsConfig.getService());
 
@@ -74,19 +89,19 @@ public class ReportingUtils {
   }
 
   /**
-   * Construct {@link WavefrontReportingConfig} from given path of YAML file
+   * Construct {@link ApplicationTagsConfig} from given path of YAML file
    */
-  public static WavefrontReportingConfig constructWavefrontReportingConfig(
-      String wfReportingConfigYamlFile) {
+  public static ApplicationTagsConfig constructApplicationTagsConfig(
+      String applicationTagsYamlFile) {
     YAMLFactory factory = new YAMLFactory(new ObjectMapper());
     YAMLParser parser;
     try {
-      parser = factory.createParser(new File(wfReportingConfigYamlFile));
+      parser = factory.createParser(new File(applicationTagsYamlFile));
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
     try {
-      return parser.readValueAs(WavefrontReportingConfig.class);
+      return parser.readValueAs(ApplicationTagsConfig.class);
     } catch (IOException e) {
       throw new RuntimeException(e);
     }
